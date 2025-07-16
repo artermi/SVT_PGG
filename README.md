@@ -71,7 +71,7 @@ where $n_C^g(t) = \sum_{j \in g} s_j(t)$ is the number of cooperators in group $
 Each agent is in 5 groups:
 
 $$
-\Pi_i(t) = \sum_{g \ni i} \pi^g_i(t)
+\Pi_i(t) = \sum_{i \in g} \pi^g_i(t)
 $$
 
 ---
