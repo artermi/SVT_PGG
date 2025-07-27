@@ -1,4 +1,3 @@
-// ========== ModelA.cpp ==========
 #include "ModelA.h"
 
 ModelA::ModelA(double r0, double sigma) {

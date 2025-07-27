@@ -17,10 +17,11 @@ public:
     void form_groups();
     std::vector<Group>& get_groups();
     Agent& get_agent(int x, int y);
+    const Agent& get_agent(int x, int y) const;  //add this overload
     int size() const;
     Agent& random_neighbor(Agent& a);
     std::vector<int> get_flat_strategy_grid() const;
-    std::pair<double, double> get_strategy_ratio() const;
+    double get_strategy_ratio() const;
 };
 
 #endif
