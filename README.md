@@ -8,6 +8,23 @@ If two public-goods games have the same mean and variance of the synergy factor 
 
 ---
 
+## CMake Build Instructions
+
+To build and run the simulation:
+
+```bash
+# 1. Configure CMake build directory
+cmake -S . -B build
+
+# 2. Compile the project
+cmake --build build
+
+# 3. Run the simulation
+./build/public_goods_sim
+```
+
+---
+
 ## 0. Symbol Key (Quick Reference)
 
 | Symbol           | Description                                                  |
@@ -163,4 +180,3 @@ All matched to $r_0$, $\sigma^2$:
 - $\tau$: 1, 10, 100, 1000, $\infty$  
 - $K$: 0.01, 0.05, 0.1, 0.2, 0.5, 1.0, 2.0  
 - $L$: 100 (later 150, 200)
-
