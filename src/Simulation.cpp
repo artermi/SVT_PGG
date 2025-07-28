@@ -39,8 +39,13 @@ void Simulation::run() {
     for (int t = 0; t < cfg.steps; ++t) {
         model->refresh(t, lattice);
 
-        if (t % cfg.snapshot_interval == 0)
-            log_snapshot(t);
+        if (t % cfg.snapshot_interval == 0) {
+            double c = log_snapshot(t);
+            if (c < 1e-6 || c > 1.0 - 1e-6) {
+                std::cout << "[Terminated early at t = " << t << "] Fixation reached.\n";
+                break;
+            }
+        }
 
         for (int i = 0; i < cfg.L * cfg.L; ++i){
             fermi_update(lattice, cfg.K);
@@ -56,8 +61,7 @@ void Simulation::run() {
     std::cout << "Simulation complete." << std::endl;
 }
 
-void Simulation::log_snapshot(int t) {
-//    compute_payoffs(lattice);
+double Simulation::log_snapshot(int t) {
     double c = lattice.get_strategy_ratio();
     double mean = mean_payoff(lattice);
     double var = var_payoff(lattice, mean);
@@ -65,9 +69,11 @@ void Simulation::log_snapshot(int t) {
     out_summary << t << "," << c << "," << mean << "," << var << "\n";
 
     std::cout << std::left
-              << std::setw(6) << t
+              << std::setw(6)  << t
               << std::setw(10) << std::fixed << std::setprecision(4) << c
               << std::setw(15) << mean
               << std::setw(15) << var
-              << std::endl;
+              << '\n';
+
+    return c;
 }

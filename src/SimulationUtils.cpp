@@ -26,6 +26,8 @@ void fermi_update(Lattice& lattice, double K) {
     int y = coord(rng);
     Agent& a = lattice.get_agent(x, y);
     Agent& b = lattice.random_neighbor(a);
+    if (a.strategy == b.strategy)
+        return;
 
     double Pi = compute_local_payoff(a);
     double Pj = compute_local_payoff(b);

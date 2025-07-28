@@ -19,5 +19,5 @@ private:
     std::ofstream out_summary;
     std::string prefix;
 
-    void log_snapshot(int t);
+    double log_snapshot(int t);
 };
