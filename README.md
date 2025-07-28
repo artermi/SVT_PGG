@@ -19,9 +19,42 @@ cmake -S . -B build
 # 2. Compile the project
 cmake --build build
 
-# 3. Run the simulation
-./build/public_goods_sim
+# 3. Run a single simulation with parameters (r0, sigma)
+./build/public_goods_sim 2.5 0.5
 ```
+
+This will generate output files in the `data/` directory.
+
+---
+
+## Run All Simulations in Parallel
+
+You can simulate all 35 parameter combinations by running:
+
+```bash
+python3 run_batch.py
+```
+
+This uses Python multiprocessing to run the following combinations:
+- $r_0 \in \{2.0,\ 2.5,\ 3.0,\ 3.5,\ 4.0,\ 4.5,\ 5.0\}$
+- $\sigma = \alpha \cdot r_0 \quad \text{where } \alpha \in \{0.1,\ 0.2,\ 0.3,\ 0.4,\ 0.5\}$
+
+Each simulation runs as a separate process and writes its results to `data/`.
+
+---
+
+## Run Full Pipeline (Build + Simulate)
+
+To compile the program and launch all simulations in one step:
+
+```bash
+./run_all.sh
+```
+
+This script will:
+1. Configure and compile the project using CMake
+2. Run all simulations in parallel
+3. Save all outputs to the `data/` folder
 
 ---
 
