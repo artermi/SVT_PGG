@@ -6,6 +6,7 @@
 
 double compute_local_payoff(Agent& a);
 void fermi_update(Lattice& lattice, double K);
+void compute_global_payoffs(Lattice& lattice);
 double mean_payoff(const Lattice& lattice);
 double var_payoff(const Lattice& lattice, double mean);
 void save_metadata(const std::string& prefix, double xi, const std::string& fixation);

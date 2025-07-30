@@ -17,6 +17,23 @@ double compute_local_payoff(Agent& a) {
     return total;
 }
 
+// Compute global payoffs for all agents by running each group once
+void compute_global_payoffs(Lattice& lattice) {
+    // Reset all agent payoffs
+    for (int x = 0; x < lattice.size(); ++x) {
+        for (int y = 0; y < lattice.size(); ++y) {
+            lattice.get_agent(x, y).payoff = 0.0;
+        }
+    }
+    // Accumulate payoff from each group
+    for (Group& g : lattice.get_groups()) {
+        for (Agent* a : g.members) {
+            a->payoff += g.compute_payoff_for(a);
+        }
+    }
+}
+
+
 void fermi_update(Lattice& lattice, double K) {
     static std::mt19937 rng(std::random_device{}());
     std::uniform_int_distribution<int> coord(0, lattice.size() - 1);
