@@ -9,18 +9,15 @@ Simulation::Simulation(const Config& config)
     : cfg(config), lattice(config.L) {
     std::filesystem::create_directories("data");
 
-    prefix = "r" + std::to_string(int(cfg.r0 * 10)) +
-             "v" + std::to_string(int(cfg.sigma * 100)) +
-             "_" + cfg.ftype +
-             "_L" + std::to_string(cfg.L);
+    prefix = format_prefix(cfg.r0, cfg.sigma, cfg.ftype, cfg.L,
+                           cfg.model_type == ModelType::TEMPORAL, cfg.tau);
 
-    if (cfg.use_model_b) {
+    if (cfg.model_type == ModelType::TEMPORAL) {
         model = std::make_unique<ModelB>(cfg.r0, cfg.sigma, cfg.L, cfg.tau);
-        prefix += "_Btau" + std::to_string(cfg.tau);
     } else {
         model = std::make_unique<ModelA>(cfg.r0, cfg.sigma);
-        prefix += "_A";
     }
+
 
     model->initialize(lattice);
 
@@ -62,6 +59,8 @@ void Simulation::run() {
 }
 
 double Simulation::log_snapshot(int t) {
+    compute_global_payoffs(lattice);  // Run all PGGs for proper payoff collection
+
     double c = lattice.get_strategy_ratio();
     double mean = mean_payoff(lattice);
     double var = var_payoff(lattice, mean);

@@ -9,7 +9,7 @@ class ModelB : public RandomnessModel {
     std::mt19937 rng;
     std::function<double()> sampler;
     int tau;
-    std::vector<double> current_r;
+    int current_block = -1;
 
 public:
     ModelB(double r0, double sigma, int lattice_size, int tau);

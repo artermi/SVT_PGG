@@ -19,8 +19,11 @@ cmake -S . -B build
 # 2. Compile the project
 cmake --build build
 
-# 3. Run a single simulation with parameters (r0, sigma)
-./build/public_goods_sim 2.5 0.5
+# 3. Run a single simulation (Model A: spatial randomness)
+./build/public_goods_sim 2.5 0.5 A
+
+# 4. Run a single simulation (Model B: temporal randomness, tau = 100)
+./build/public_goods_sim 2.5 0.5 B 100
 ```
 
 This will generate output files in the `data/` directory.

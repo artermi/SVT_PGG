@@ -5,6 +5,7 @@
 #include <cmath>
 #include <string>
 #include <algorithm>
+#include <sstream>
 
 using json = nlohmann::json;
 
@@ -33,6 +34,19 @@ void compute_global_payoffs(Lattice& lattice) {
     }
 }
 
+std::string format_prefix(double r0, double sigma, const std::string& ftype,
+                          int L, bool is_model_b, int tau){
+    std::ostringstream oss;
+    oss << "r" << std::setw(2) << std::setfill('0') << static_cast<int>(r0 * 10)
+        << "v" << std::setw(3) << std::setfill('0') << static_cast<int>(sigma * 100)
+        << "_" << ftype
+        << "_L" << L;
+    if (is_model_b)
+        oss << "_B" << "_tau" << tau;
+    else
+        oss << "_A";
+    return oss.str();
+}
 
 void fermi_update(Lattice& lattice, double K) {
     static std::mt19937 rng(std::random_device{}());

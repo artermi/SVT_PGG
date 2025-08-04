@@ -1,7 +1,7 @@
-// Config.h
-
 #pragma once
 #include <string>
+
+enum class ModelType { SPATIAL, TEMPORAL };
 
 struct Config {
     int L = 100;
@@ -11,6 +11,6 @@ struct Config {
     int steps = 1000;
     int snapshot_interval = 100;
     int tau = 10;
-    bool use_model_b = false;
+    ModelType model_type = ModelType::SPATIAL;  // clear and extensible
     std::string ftype = "uniform";
 };
