@@ -52,8 +52,8 @@ void Simulation::run() {
         }
     }
 
-    // Final refresh and snapshot at t = cfg.steps
-    model->refresh(cfg.steps, lattice);      // Optional, if r(t) matters at t = T
+    //Finally, take a snapshot at t = cfg.steps
+    //model->refresh(cfg.steps, lattice);      // Optional, if r(t) matters at t = T
     log_snapshot(cfg.steps);
 
     save_metadata(prefix, 0.0, "none");
