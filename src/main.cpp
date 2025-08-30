@@ -3,8 +3,12 @@
 #include <cstdlib>   // for getenv
 #include <iostream>
 #include <string>
+#include "utils/seed.hpp"
+
 
 int main(int argc, char* argv[]) {
+    const uint64_t PG_SEED = read_seed_from_env();
+
     if (argc < 4) {
         std::cerr << "Usage: " << argv[0] << " r0 sigma model [tau]\n";
         std::cerr << "  model: A (spatial) or B (temporal)\n";

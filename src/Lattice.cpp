@@ -1,6 +1,10 @@
 #include "Lattice.h"
-#include <random>
 #include <iostream>
+#include <cstdint>
+#include <random>   
+#include "utils/seed.hpp"
+#include "utils/splitmix.hpp"   // put splitmix64 + u01_from_uint here
+
 
 Lattice::Lattice(int size) : L(size) {
     initialize_agents();
@@ -8,19 +12,21 @@ Lattice::Lattice(int size) : L(size) {
 }
 
 void Lattice::initialize_agents() {
-    std::mt19937 rng(std::random_device{}());  // or use fixed seed
-    std::uniform_int_distribution<int> binary(0, 1);
+    const uint64_t seed = read_seed_from_env();  // PG_SEED (0 if unset)
 
     grid.resize(L);
     int id = 0;
     for (int x = 0; x < L; ++x) {
         grid[x].reserve(L);
         for (int y = 0; y < L; ++y) {
-            int strategy = binary(rng);  // 0 or 1
+            // deterministic per-cell "coin flip" from (seed, x, y)
+            const uint64_t key = (static_cast<uint64_t>(y) << 32) ^ static_cast<uint64_t>(x);
+            const uint64_t z   = splitmix64(seed ^ 0xC0FFEEFACEB00B5ull ^ key);
+            const double   u   = u01_from_uint(z);
+            const int strategy = (u < 0.5) ? 1 : 0;  // 50% Cs
             grid[x].emplace_back(id++, x, y, strategy);
         }
     }
-
 }
 
 void Lattice::form_groups() {
@@ -48,10 +54,13 @@ void Lattice::form_groups() {
     }
 }
 std::vector<Group>& Lattice::get_groups() { return groups; }
+
 Agent& Lattice::get_agent(int x, int y) { return grid[x][y]; }
+
 const Agent& Lattice::get_agent(int x, int y) const {
     return grid[x][y];
 }
+
 int Lattice::size() const { return L; }
 
 Agent& Lattice::random_neighbor(Agent& a) {

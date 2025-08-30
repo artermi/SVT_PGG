@@ -6,9 +6,9 @@ from multiprocessing import Pool
 r0_values = [2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]
 alphas    = [0.1, 0.2, 0.3, 0.4, 0.5]
 
-models = ["A", "B"]        # which models to run
-taus   = [1, 10, 1000]     # only for Model B
-seeds  = range(1, 11)      # 10 seeds by default
+models = ["A","B"]        # which models to run
+taus   = [1,10,1000]     # only for Model B
+seeds  = range(1, 2)      # 1 seeds by default
 
 n_processes = 6
 DRY_RUN = False  # True = only print commands

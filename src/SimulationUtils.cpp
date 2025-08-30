@@ -77,7 +77,7 @@ double mean_payoff(const Lattice& lattice) {
             sum += lattice.get_agent(x, y).payoff;
             ++count;
         }
-    return sum / count;
+    return sum / (double) count;
 }
 
 double var_payoff(const Lattice& lattice, double mean) {
@@ -89,7 +89,7 @@ double var_payoff(const Lattice& lattice, double mean) {
             var += diff * diff;
             ++count;
         }
-    return var / count;
+    return var / (double) count;
 }
 
 void save_metadata(const std::string& prefix, double xi, const std::string& fixation) {
