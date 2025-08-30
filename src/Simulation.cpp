@@ -5,21 +5,24 @@
 #include <iomanip>
 #include <iostream>
 
-Simulation::Simulation(const Config& config)
-    : cfg(config), lattice(config.L) {
+Simulation::Simulation(const Config& config,
+                       std::mt19937& rng_main_,
+                       std::mt19937& rng_r_)
+    : cfg(config), lattice(config.L),
+      rng_main(rng_main_), rng_r(rng_r_) {
+
     std::filesystem::create_directories("data");
 
     prefix = format_prefix(cfg.r0, cfg.sigma, cfg.ftype, cfg.L,
                            cfg.model_type == ModelType::TEMPORAL, cfg.tau);
 
     if (cfg.model_type == ModelType::TEMPORAL) {
-        model = std::make_unique<ModelB>(cfg.r0, cfg.sigma, cfg.L, cfg.tau);
+        model = std::make_unique<ModelB>(cfg.r0, cfg.sigma, cfg.L, cfg.tau, rng_r);
     } else {
-        model = std::make_unique<ModelA>(cfg.r0, cfg.sigma);
+        model = std::make_unique<ModelA>(cfg.r0, cfg.sigma, rng_r);
     }
 
-
-    model->initialize(lattice);
+    model->initialize(lattice, rng_main);
 
     out_summary.open("data/" + prefix + "_summary.csv");
     out_summary << "time,C,mean_payoff,var_payoff\n";

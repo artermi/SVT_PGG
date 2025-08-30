@@ -1,5 +1,6 @@
 #include "Config.h"
 #include "Simulation.h"
+#include <cstdlib>   // for getenv
 #include <iostream>
 #include <string>
 
@@ -30,7 +31,21 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    Simulation sim(config);
+
+    // --- New: seed handling ---
+    unsigned int base_seed = 42; // fallback if not provided
+    if (const char* env_p = std::getenv("PG_SEED")) {
+        base_seed = std::stoul(env_p);
+    }
+
+    std::mt19937 rng_main(base_seed);         // for lattice init, shuffle, neighbour choice
+    std::mt19937 rng_r(base_seed + 12345);    // for r draws only
+
+    // You now have two RNGs. There are two ways to use them:
+    // (a) Pass them into Simulation (preferred).
+    // (b) Make them global/singletons if Simulation expects to construct its own.
+
+    Simulation sim(config, rng_main, rng_r);  // <-- you’ll need to add overload to Simulation
     sim.run();
     return 0;
 }

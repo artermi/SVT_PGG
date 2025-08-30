@@ -42,7 +42,8 @@ std::string format_prefix(double r0, double sigma, const std::string& ftype,
         << "_" << ftype
         << "_L" << L;
     if (is_model_b)
-        oss << "_B" << "_tau" << tau;
+        oss << "_B"
+            << "_tau" << std::setw(5) << std::setfill('0') << tau;
     else
         oss << "_A";
     return oss.str();

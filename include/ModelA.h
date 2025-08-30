@@ -6,12 +6,15 @@
 #include "RandomnessModel.h"
 
 class ModelA : public RandomnessModel {
-    std::mt19937 rng;
-    std::function<double()> sampler;
+    std::function<double()> sampler;  // no internal rng anymore
 
 public:
-    ModelA(double r0, double sigma);
-    void initialize(Lattice& lattice) override;
+    // minimal change: accept rng_r by reference
+    ModelA(double r0, double sigma, std::mt19937& rng_r);
+
+    // minimal change: initialize now also takes rng_main
+    void initialize(Lattice& lattice, std::mt19937& rng_main) override;
+
     void refresh(int t, Lattice& lattice) override;
 };
 
