@@ -11,8 +11,6 @@ Simulation::Simulation(const Config& config,
     : cfg(config), lattice(config.L),
       rng_main(rng_main_), rng_r(rng_r_) {
 
-    std::filesystem::create_directories("data");
-
     prefix = format_prefix(cfg.r0, cfg.sigma, cfg.ftype, cfg.L,
                            cfg.model_type == ModelType::TEMPORAL, cfg.tau);
 
@@ -24,7 +22,7 @@ Simulation::Simulation(const Config& config,
 
     model->initialize(lattice, rng_main);
 
-    out_summary.open("data/" + prefix + "_summary.csv");
+    out_summary.open(prefix + "_summary.csv");
     out_summary << "time,C,mean_payoff,var_payoff\n";
 
     std::cout << std::left
@@ -36,8 +34,15 @@ Simulation::Simulation(const Config& config,
 }
 
 void Simulation::run() {
-    for (int t = 0; t < cfg.steps; ++t) {
+    log_snapshot(0);
+
+    for (int t = 0; t < cfg.steps;) {
         model->refresh(t, lattice);
+
+        for (int i = 0; i < cfg.L * cfg.L; ++i){
+            fermi_update(lattice, cfg.K);
+        }
+        t++;
 
         if (t % cfg.snapshot_interval == 0) {
             double c = log_snapshot(t);
@@ -46,15 +51,11 @@ void Simulation::run() {
                 break;
             }
         }
-
-        for (int i = 0; i < cfg.L * cfg.L; ++i){
-            fermi_update(lattice, cfg.K);
-        }
     }
 
     //Finally, take a snapshot at t = cfg.steps
     //model->refresh(cfg.steps, lattice);      // Optional, if r(t) matters at t = T
-    log_snapshot(cfg.steps);
+    //log_snapshot(cfg.steps);
 
     save_metadata(prefix, 0.0, "none");
     out_summary.close();

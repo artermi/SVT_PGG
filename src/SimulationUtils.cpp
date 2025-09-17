@@ -97,6 +97,6 @@ void save_metadata(const std::string& prefix, double xi, const std::string& fixa
     j["correlation_length"] = xi;
     j["fixation"] = fixation;
 
-    std::ofstream out("data/" + prefix + "_metadata.json");
+    std::ofstream out(prefix + "_metadata.json");
     out << j.dump(2);
 }
