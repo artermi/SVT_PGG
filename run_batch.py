@@ -9,7 +9,7 @@ alphas    = [0.1, 0.2, 0.3, 0.4, 0.5]
 
 models = ["A","B"]         # which models to run
 taus   = [1,10,100,1000]   # only for Model B
-seeds  = range(6, 21)       # seeds 1..5
+seeds  = range(1, 21)       # seeds 1..20
 
 n_processes = 6
 DRY_RUN = False  # True = only print commands
