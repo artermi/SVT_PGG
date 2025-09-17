@@ -24,6 +24,10 @@ cmake --build build
 
 # 4. Run a single simulation (Model B: temporal randomness, tau = 100)
 ./build/public_goods_sim 2.5 0.5 B 100
+
+#5 Run a single simulation with an environmental random seed (Use Model B as example)
+./build/public_goods_sim 2.5 0.5 B 100 | PG_SEED=3 
+
 ```
 
 This will generate output files in the `data/` directory.
