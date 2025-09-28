@@ -5,13 +5,13 @@ from pathlib import Path
 
 # --- CONFIGURATION ---
 r0_values = [2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]
-alphas    = [0.1, 0.2, 0.3, 0.4, 0.5]
+alphas    = [0.7,0.9]
 
-models = ["A","B"]         # which models to run
+models = ["A"]         # which models to run
 taus   = [1,10,100,1000]   # only for Model B
 seeds  = range(1, 21)       # seeds 1..20
 
-n_processes = 6
+n_processes = 8
 DRY_RUN = False  # True = only print commands
 
 # --- PATHS ---
@@ -28,7 +28,7 @@ DATA_ROOT.mkdir(exist_ok=True)
 
 # --- JOB GENERATION ---
 jobs = []
-for r0, alpha, seed in itertools.product(r0_values, alphas, seeds):
+for seed, r0, alpha in itertools.product(seeds, r0_values, alphas):
     sigma = round(r0 * alpha, 6)
     env = os.environ.copy()
     env["PG_SEED"] = str(seed)
